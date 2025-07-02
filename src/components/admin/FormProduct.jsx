@@ -207,7 +207,7 @@ const FormProduct = () => {
         </div>
 
         {/* Mobile & Tablet Card View */}
-        <div className="lg:hidden space-y-4">
+         <div className="lg:hidden space-y-4">
           {currentProducts.map((item, index) => (
             <div key={item.id} className="bg-white border border-gray-200 rounded-lg shadow-sm p-4">
               {/* Header with Number and Actions */}
@@ -225,7 +225,21 @@ const FormProduct = () => {
                     <span className="text-xs font-medium text-orange-600">{item.sold}</span>
                   </div>
                 </div>
-               
+                <div className="hidden md:flex lg:hidden space-x-2">
+                  <Link
+                    to={`/admin/product/${item.id}`}
+                    className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded-md transition-colors"
+                  >
+                    <Edit3 size={16} />
+                  </Link>
+                  <button
+                    onClick={() => handleDelete(item.id)}
+                    className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-md transition-colors"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+
               </div>
 
               {/* Product Image and Info */}
@@ -277,7 +291,6 @@ const FormProduct = () => {
             </div>
           ))}
         </div>
-
         {/* No Products Message */}
         {product.length === 0 && (
           <div className="text-center text-gray-500 py-12">
