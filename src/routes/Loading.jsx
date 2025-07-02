@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom"
 
 const Loading = () => {
 
-    const[count,setCount] = useState(3)
+    const[count,setCount] = useState(5)
     const[redirect,setRedirect] =useState(false)
 
     useEffect(()=>{
