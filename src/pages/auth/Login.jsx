@@ -8,7 +8,7 @@ const Login = () => {
   const navigate = useNavigate()
   const actionLogin = useEcomStore((e) => e.actionLogin)
   const user = useEcomStore((e) => e.user)
-
+  const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({ email: '', password: '' })
 
   const handleOnChange = (e) => {
@@ -20,14 +20,20 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true)
     try {
       const res = await actionLogin(form)
       const role = res.data.payload.role
-      roleReadirect(role)
-      toast.success(`Welcome 👋`)
+
+      // ✅ หน่วงเวลา 1 วินาทีก่อน redirect
+      setTimeout(() => {
+        roleReadirect(role)
+        toast.success(`Welcome 👋`)
+      }, 1000)
     } catch (error) {
       const errMsg = error.response?.data?.message || 'เข้าสู่ระบบไม่สำเร็จ'
       toast.error(errMsg)
+      setLoading(false)
     }
   }
 
@@ -37,7 +43,9 @@ const Login = () => {
     } else {
       navigate(-1)
     }
+    setLoading(false) // ✅ ปิด loading หลัง navigate
   }
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-emerald-100 to-white p-4">
@@ -74,10 +82,19 @@ const Login = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 rounded-lg transition"
+            disabled={loading}
+            className={`w-full ${loading ? 'bg-emerald-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700'
+              } text-white font-medium py-2 rounded-lg transition flex justify-center items-center`}
           >
-            เข้าสู่ระบบ
+            {loading ? (
+              <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+              </svg>
+            ) : null}
+            {loading ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ'}
           </button>
+
         </form>
 
         <p className="text-center text-sm text-neutral-500">
